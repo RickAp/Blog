@@ -1,9 +1,7 @@
 import Post from "../models/post.model.js";
 
 export const getPosts = async (req, res) => {
-    const posts = await Post.find({
-        user: req.user.id
-    }).populate('user');
+    const posts = await Post.find().populate('user');
     res.json(posts);
 };
 
@@ -28,9 +26,14 @@ export const createPost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-    const post = await Post.findByIdAndDelete(req.params.id);
-
+    const post = await Post.findById(req.params.id);
+ 
     if (!post) return res.status(404).json({ message: "Post not found" });
+
+    if (post.user.toString() !== req.user.id) {
+        return res.status(403).json({ message: "You are not authorized to delete this post" });
+    }
+    await Post.findByIdAndDelete(req.params.id);
     return res.sendStatus(204);
 };
 

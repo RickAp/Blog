@@ -5,7 +5,7 @@ export const userSlice = createSlice({
     initialState: {
       token: null,
       user: null,
-      invitations: [],
+      posts: [],
     },
     reducers: {
       login: (state, action) => {
@@ -17,7 +17,7 @@ export const userSlice = createSlice({
         state.user = null;
       },
       addPost: (state, action) => {
-        state.invitations.push(action.payload);
+        state.posts.push(action.payload);
       },
     },
   });
